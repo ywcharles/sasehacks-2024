@@ -36,7 +36,7 @@ export default function CameraComponent({ navigation }) {
     setAutoFocus(Camera.Constants.AutoFocus.off);
     
     // Optionally, you can log or track the focus point
-    //console.log(`Focus Point: X: ${x}, Y: ${y}`);
+    console.log(`Focus Point: X: ${x}, Y: ${y}`);
   };
 
   if (hasPermission === null) {
@@ -59,19 +59,6 @@ export default function CameraComponent({ navigation }) {
           <View style={styles.buttonContainer}>
             <Button title="Take Picture" onPress={takePicture} />
           </View>
-          {focusPoint && (
-            <View style={{
-              position: 'absolute',
-              top: focusPoint.y * screenHeight - 25,
-              left: focusPoint.x * screenWidth - 25,
-              width: 50,
-              height: 50,
-              borderRadius: 25,
-              borderWidth: 2,
-              borderColor: 'yellow',
-              backgroundColor: 'transparent',
-            }} />
-          )}
         </Camera>
       </TouchableWithoutFeedback>
     </View>
