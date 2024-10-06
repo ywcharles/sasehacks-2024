@@ -4,6 +4,7 @@ import { Camera } from 'expo-camera/legacy';
 
 export default function CameraComponent({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
+  const [autoFocus, setAutoFocus] = useState(Camera.Constants.AutoFocus.on);
   const cameraRef = useRef(null);
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export default function CameraComponent({ navigation }) {
   const takePicture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
-      console.log(photo); // You can do something with the photo here, like saving it or navigating to another screen
+      console.log(photo); // You can handle the photo here, like saving or navigating
     }
   };
 
@@ -29,7 +30,12 @@ export default function CameraComponent({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} ref={cameraRef}>
+      <Camera
+        style={styles.camera}
+        ref={cameraRef}
+        autoFocus={autoFocus} // Enable autoFocus
+        type={Camera.Constants.Type.back} // Optional: Set the camera type (front/back)
+      >
         <View style={styles.buttonContainer}>
           <Button title="Take Picture" onPress={takePicture} />
         </View>
