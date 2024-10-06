@@ -27,19 +27,17 @@ export default function HomeScreen({ navigation }) {
             already in your fridge!
           </Text>
       </View>
-      <Image style={{ width: "100%", height: "43%", bottom: 0, zIndex: 2 }} source={require('../assets/chef.png')}/>
+      <Image style={{ width: "100%", height: "50%", bottom: 0, zIndex: 2 }} source={require('../assets/chef.png')}/>
 
       {/* Buttons */}
       <View 
         style={{ 
-          gap: 20,
+          marginTop: 20,
           zIndex: 2,
           paddingHorizontal: '10%',
           justifyContent: 'center',
         }}>
-        <Button buttonColor="#A9DEF9" textColor="#05299E" icon="camera" mode="elevated" onPress={() => navigation.navigate('Camera')}>Camera</Button>
-        <Button buttonColor="#A9DEF9" textColor="#05299E" mode="elevated" onPress={() => navigation.navigate('Ingredients')}>Ingredients</Button>
-        <Button buttonColor="#A9DEF9" textColor="#05299E"mode="elevated" onPress={() => navigation.navigate('Recipes')}>Recipes</Button>
+        <Button buttonColor="#A9DEF9" textColor="#05299E" icon="camera" mode="elevated" onPress={() => navigation.navigate('Camera')}>Get Started</Button>
       </View>
     </View>
   );
