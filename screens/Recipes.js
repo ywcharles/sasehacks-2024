@@ -6,12 +6,19 @@ const RecipeItem = ({ item }) => (
   <View style={styles.recipeItem}>
     <Text style={styles.recipeName}>{item.name}</Text>
     <Text style={styles.recipeDescription}>{item.description}</Text>
+    
     <Text style={styles.sectionTitle}>Ingredients:</Text>
-    <Text>{item.ingredients}</Text>
+    {item.ingredients.map((ingredient, index) => (
+      <Text key={index}>- {ingredient}</Text> // Properly map and return ingredients
+    ))}
+    
     <Text style={styles.sectionTitle}>Instructions:</Text>
-    <Text>{item.instructions}</Text>
+    {item.instructions.map((instruction, index) => (
+      <Text key={index}>{index+1}. {instruction}</Text> // Properly map and return instructions
+    ))}
   </View>
 );
+
 
 const Recipes = ({ route }) => {
   const { ingredients } = route.params;
@@ -45,7 +52,7 @@ const Recipes = ({ route }) => {
       data={recipes}
       renderItem={({ item }) => <RecipeItem item={item} />}
       keyExtractor={(item, index) => index.toString()}
-      ListEmptyComponent={<Text>No recipes found</Text>}
+      ListEmptyComponent={<Text>No recipes found. Please try different ingredients.</Text>}
     />
   );
 };

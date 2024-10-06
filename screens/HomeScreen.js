@@ -14,19 +14,7 @@ export default function HomeScreen({ navigation }) {
         onPress={() =>
           navigation.navigate("Recipes", {
             ingredients: [
-              "Flour",
-
-              "Baking soda",
-
-              "Salt",
-
-              "Butter",
-
-              "Brown sugar",
-
-              "Eggs",
-
-              "Bananas",
+              "spaghetti", "tomato sauce", "garlic", "olive oil", "basil", "parmesan cheese"
             ],
           })
         }
