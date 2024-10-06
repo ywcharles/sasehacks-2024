@@ -37,9 +37,9 @@ export default function HomeScreen({ navigation }) {
           paddingHorizontal: '10%',
           justifyContent: 'center',
         }}>
-        <Button buttonColor="#9ACEEB" textColor="#00008B" icon="camera" mode="elevated" onPress={() => navigation.navigate('Camera')}>Camera</Button>
-        <Button buttonColor="#9ACEEB" textColor="#00008B" mode="elevated" onPress={() => navigation.navigate('Ingredients')}>Ingredients</Button>
-        <Button buttonColor="#9ACEEB" textColor="#00008B"mode="elevated" onPress={() => navigation.navigate('Recipes')}>Recipes</Button>
+        <Button buttonColor="#A9DEF9" textColor="#05299E" icon="camera" mode="elevated" onPress={() => navigation.navigate('Camera')}>Camera</Button>
+        <Button buttonColor="#A9DEF9" textColor="#05299E" mode="elevated" onPress={() => navigation.navigate('Ingredients')}>Ingredients</Button>
+        <Button buttonColor="#A9DEF9" textColor="#05299E"mode="elevated" onPress={() => navigation.navigate('Recipes')}>Recipes</Button>
       </View>
     </View>
   );
