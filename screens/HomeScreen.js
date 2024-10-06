@@ -37,7 +37,7 @@ export default function HomeScreen({ navigation }) {
           paddingHorizontal: '10%',
           justifyContent: 'center',
         }}>
-        <Button buttonColor="#A9DEF9" textColor="#05299E" icon="camera" mode="elevated" onPress={() => navigation.navigate('Camera')}>Get Started</Button>
+        <Button style={{ height: 50, justifyContent: "center" }} buttonColor="#A9DEF9" textColor="#05299E" icon="camera" mode="elevated" onPress={() => navigation.navigate('Camera')}>Get Started</Button>
       </View>
     </View>
   );
