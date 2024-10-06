@@ -2,6 +2,17 @@ import React, { useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import useRecipes from '../hooks/useRecipes';
 
+const RecipeItem = ({ item }) => (
+  <View style={styles.recipeItem}>
+    <Text style={styles.recipeName}>{item.name}</Text>
+    <Text style={styles.recipeDescription}>{item.description}</Text>
+    <Text style={styles.sectionTitle}>Ingredients:</Text>
+    <Text>{item.ingredients}</Text>
+    <Text style={styles.sectionTitle}>Instructions:</Text>
+    <Text>{item.instructions}</Text>
+  </View>
+);
+
 const Recipes = ({ route }) => {
   const { ingredients } = route.params;
   const { recipes, loading, error, generateRecipes } = useRecipes();
@@ -28,25 +39,14 @@ const Recipes = ({ route }) => {
     );
   }
 
-  const renderRecipe = ({ item }) => (
-    <View style={styles.recipeItem}>
-      <Text style={styles.recipeName}>{item.name}</Text>
-      <Text>{item.description}</Text>
-    </View>
-  );
-
   return (
-    <View style={styles.container}>
-      {recipes && recipes.length > 0 ? (
-        <FlatList
-          data={recipes}
-          renderItem={renderRecipe}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      ) : (
-        <Text>No recipes found</Text>
-      )}
-    </View>
+    <FlatList
+      style={styles.container}
+      data={recipes}
+      renderItem={({ item }) => <RecipeItem item={item} />}
+      keyExtractor={(item, index) => index.toString()}
+      ListEmptyComponent={<Text>No recipes found</Text>}
+    />
   );
 };
 
@@ -61,6 +61,15 @@ const styles = StyleSheet.create({
   recipeName: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  recipeDescription: {
+    fontStyle: 'italic',
+    marginBottom: 10,
+  },
+  sectionTitle: {
+    fontWeight: 'bold',
+    marginTop: 10,
     marginBottom: 5,
   },
 });

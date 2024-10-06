@@ -11,29 +11,42 @@ const useRecipes = () => {
       setError(null);
 
       const apiKey = "AIzaSyCqOUfraYwP_Ek_fE0MGxHntlYIxine2HI";
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
 
-      const prompt = `Create 3 recipe ideas based on these ingredients: ${ingredients.join(
-        ", "
-      )}. For each recipe, provide a name, a brief description, ingredients' measurements and the instructions. Format the output as follows:
+      const prompt = `Create 3 unique and creative recipe ideas based on some or all of these ingredients: ${ingredients.join(", ")}. 
+
+Important guidelines:
+1. You don't need to use all the ingredients listed. Use at least 2-3 of them in each recipe.
+2. Limit additional ingredients to a maximum of 3-4 common household items per recipe.
+3. Focus on simple, easy-to-make recipes that don't require specialized equipment.
+4. Provide precise measurements for ingredients (e.g., "1 cup", "2 tablespoons", not "some" or "a handful").
+5. Keep instructions concise but clear, with no more than 5-6 steps per recipe.
+
+For each recipe, provide:
+1. A creative name
+2. A brief, enticing description (1-2 sentences)
+3. A list of ingredients with measurements
+4. Clear, step-by-step instructions
+
+Format the output as follows:
 
 Recipe 1:
-Name: [Recipe Name]
-Description: [Brief description]
-Ingredients: [Ingredients and it's measurements]
-Instructions" [Instructions on how to complete the recipe]
+Name: [Creative Recipe Name]
+Description: [Brief, enticing description]
+Ingredients:
+- [Ingredient 1 with measurement]
+- [Ingredient 2 with measurement]
+- ...
+Instructions:
+1. [Step 1]
+2. [Step 2]
+3. ...
 
 Recipe 2:
-Name: [Recipe Name]
-Description: [Brief description]
-Ingredients: [Ingredients and it's measurements]
-Instructions" [Instructions on how to complete the recipe]
+[Same format as Recipe 1]
 
 Recipe 3:
-Name: [Recipe Name]
-Description: [Brief description]
-Ingredients: [Ingredients and it's measurements]
-Instructions" [Instructions on how to complete the recipe]
+[Same format as Recipe 1]
 `;
 
       const requestBody = {
@@ -65,7 +78,7 @@ Instructions" [Instructions on how to complete the recipe]
   }, []);
 
   const parseGeneratedText = (text) => {
-    const recipeRegex = /Recipe \d+:\nName: (.+)\nDescription: (.+)/g;
+    const recipeRegex = /Recipe \d+:\nName: (.+)\nDescription: (.+)\nIngredients:\n([\s\S]+?)\nInstructions:\n([\s\S]+?)(?=\n\nRecipe \d+:|$)/g;
     const parsedRecipes = [];
     let match;
 
@@ -73,6 +86,8 @@ Instructions" [Instructions on how to complete the recipe]
       parsedRecipes.push({
         name: match[1].trim(),
         description: match[2].trim(),
+        ingredients: match[3].trim(),
+        instructions: match[4].trim(),
       });
     }
 
