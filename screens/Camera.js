@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 import { Camera } from 'expo-camera/legacy';
+import { IconButton } from 'react-native-paper';
 
 export default function CameraComponent({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
-  const [autoFocus, setAutoFocus] = useState(Camera.Constants.AutoFocus.on);
   const cameraRef = useRef(null);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function CameraComponent({ navigation }) {
   const takePicture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
-      console.log(photo); // You can handle the photo here, like saving or navigating
+      console.log(photo); // You can do something with the photo here, like saving it or navigating to another screen
     }
   };
 
@@ -30,14 +30,15 @@ export default function CameraComponent({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Camera
-        style={styles.camera}
-        ref={cameraRef}
-        autoFocus={autoFocus} // Enable autoFocus
-        type={Camera.Constants.Type.back} // Optional: Set the camera type (front/back)
-      >
+      <Camera style={styles.camera} ref={cameraRef}>
         <View style={styles.buttonContainer}>
-          <Button title="Take Picture" onPress={takePicture} />
+          <IconButton
+            icon="camera"
+            size={60} 
+            color="#FFFFFF" 
+            style={styles.circleButton}
+            onPress={takePicture}
+          />
         </View>
       </Camera>
     </View>
@@ -56,5 +57,18 @@ const styles = StyleSheet.create({
     flex: 0.1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  circleButton: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 40, 
+    elevation: 5, 
+    shadowColor: '#000', 
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.5,
+    marginBottom: 100
   },
 });
