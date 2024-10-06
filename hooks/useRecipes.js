@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 const useRecipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -10,19 +10,40 @@ const useRecipes = () => {
       setLoading(true);
       setError(null);
 
-      const apiKey = process.env.GEMINI_KEY
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
-      
-      const prompt = `Create 3 recipe ideas based on these ingredients: ${ingredients.join(', ')}. For each recipe, provide a name and a brief description. Format the output as a JSON array of objects, each with 'name' and 'description' fields.`;
+      const apiKey = "AIzaSyCqOUfraYwP_Ek_fE0MGxHntlYIxine2HI";
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`
+
+      const prompt = `Create 3 recipe ideas based on these ingredients: ${ingredients.join(
+        ", "
+      )}. For each recipe, provide a name, a brief description, ingredients' measurements and the instructions. Format the output as follows:
+
+Recipe 1:
+Name: [Recipe Name]
+Description: [Brief description]
+Ingredients: [Ingredients and it's measurements]
+Instructions" [Instructions on how to complete the recipe]
+
+Recipe 2:
+Name: [Recipe Name]
+Description: [Brief description]
+Ingredients: [Ingredients and it's measurements]
+Instructions" [Instructions on how to complete the recipe]
+
+Recipe 3:
+Name: [Recipe Name]
+Description: [Brief description]
+Ingredients: [Ingredients and it's measurements]
+Instructions" [Instructions on how to complete the recipe]
+`;
 
       const requestBody = {
         contents: [{ parts: [{ text: prompt }] }],
       };
 
       const response = await fetch(endpoint, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
       });
@@ -31,10 +52,10 @@ const useRecipes = () => {
 
       if (response.ok) {
         const generatedText = data.candidates[0].content.parts[0].text;
-        const parsedRecipes = JSON.parse(generatedText);
+        const parsedRecipes = parseGeneratedText(generatedText);
         setRecipes(parsedRecipes);
       } else {
-        throw new Error(data.error.message || 'Failed to generate recipes');
+        throw new Error(data.error.message || "Failed to generate recipes");
       }
     } catch (err) {
       setError(err.message);
@@ -42,6 +63,21 @@ const useRecipes = () => {
       setLoading(false);
     }
   }, []);
+
+  const parseGeneratedText = (text) => {
+    const recipeRegex = /Recipe \d+:\nName: (.+)\nDescription: (.+)/g;
+    const parsedRecipes = [];
+    let match;
+
+    while ((match = recipeRegex.exec(text)) !== null) {
+      parsedRecipes.push({
+        name: match[1].trim(),
+        description: match[2].trim(),
+      });
+    }
+
+    return parsedRecipes;
+  };
 
   return { recipes, loading, error, generateRecipes };
 };
