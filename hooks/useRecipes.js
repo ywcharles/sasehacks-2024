@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
+import { GEMINI_KEY } from '@env';
 
-const apiKey = process.env.GEMINI_KEY;
+const apiKey = GEMINI_KEY;
 
 const useRecipes = () => {
   const [recipes, setRecipes] = useState([]);
