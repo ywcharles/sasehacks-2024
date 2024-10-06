@@ -38,7 +38,20 @@ export default function HomeScreen({ navigation }) {
           justifyContent: 'center',
         }}>
         <Button style={{ height: 50, justifyContent: "center" }} buttonColor="#A9DEF9" textColor="#05299E" icon="camera" mode="elevated" onPress={() => navigation.navigate('Camera')}>Get Started</Button>
-      </View>
+        <Button
+        title="Ingredients"
+        onPress={() => navigation.navigate("Ingredients")}
+      />
+      <Button
+        title="Recipes"
+        onPress={() =>
+          navigation.navigate("Recipes", {
+            ingredients: [
+              "banana", "oats", "egg", "honey"
+            ],
+          })
+        }
+      />  
     </View>
   );
 }
