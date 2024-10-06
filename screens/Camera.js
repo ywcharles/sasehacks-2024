@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Button, Text, StyleSheet, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import { Camera } from 'expo-camera/legacy';
+import { IconButton } from 'react-native-paper';
 
 export default function CameraComponent({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -57,7 +58,13 @@ export default function CameraComponent({ navigation }) {
           focusDepth={focusPoint?.x || 0.5} // Optional: Set focus depth based on focus point
         >
           <View style={styles.buttonContainer}>
-            <Button title="Take Picture" onPress={takePicture} />
+            <IconButton
+              icon="camera"
+              size={60} 
+              color="#FFFFFF" 
+              style={styles.circleButton}
+              onPress={takePicture}
+            />
           </View>
         </Camera>
       </TouchableWithoutFeedback>
@@ -77,5 +84,18 @@ const styles = StyleSheet.create({
     flex: 0.1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  circleButton: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 40, 
+    elevation: 5, 
+    shadowColor: '#000', 
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.5,
+    marginBottom: 100
   },
 });
