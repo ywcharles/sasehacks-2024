@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
 
+const apiKey = process.env.GEMINI_KEY;
+
 const useRecipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -10,7 +12,6 @@ const useRecipes = () => {
       setLoading(true);
       setError(null);
 
-      const apiKey = "AIzaSyCqOUfraYwP_Ek_fE0MGxHntlYIxine2HI";
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
 
       // Modify the prompt to ask for JSON formatted response

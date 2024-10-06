@@ -14,7 +14,7 @@ export default function HomeScreen({ navigation }) {
         onPress={() =>
           navigation.navigate("Recipes", {
             ingredients: [
-              "spaghetti", "tomato sauce", "garlic", "olive oil", "basil", "parmesan cheese"
+              "banana", "oats", "egg", "honey"
             ],
           })
         }
