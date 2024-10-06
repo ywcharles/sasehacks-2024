@@ -14,7 +14,7 @@ export default function HomeScreen({ navigation }) {
       />
       <Button
         title="Recipes"
-        onPress={() => navigation.navigate('Recipes')}
+        onPress={() => navigation.navigate('Recipes', { ingredients: ['chicken', 'tomatoes', 'onions'] })}
       />
     </View>
   );
