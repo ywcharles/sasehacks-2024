@@ -51,8 +51,8 @@ export default function Ingredients({ navigation }) {
       title={item}
       right={() => (
         <View style={styles.listButtons}>
-          <Button onPress={() => modifyIngredient(index)}>Modify</Button>
-          <Button onPress={() => deleteIngredient(index)}>Delete</Button>
+          <Button textColor="#05299E" onPress={() => modifyIngredient(index)}>Modify</Button>
+          <Button textColor="#05299E" onPress={() => deleteIngredient(index)}>Delete</Button>
         </View>
       )}
     />
@@ -70,13 +70,13 @@ export default function Ingredients({ navigation }) {
           style={styles.list}
         />
         
-        <Button mode="contained" onPress={addIngredient} style={styles.addButton}>
+        <Button buttonColor="#A9DEF9" textColor="#05299E" mode="contained" onPress={addIngredient} style={styles.addButton}>
           Add Ingredient
         </Button>
 
         {/* Dialog for adding or modifying ingredients */}
         <Portal>
-          <Dialog visible={dialogVisible} onDismiss={hideDialog}>
+          <Dialog visible={dialogVisible} onDismiss={hideDialog} style={{ backgroundColor: "#eef9fe"}}>
             <Dialog.Title>{isEditing ? 'Modify Ingredient' : 'Add Ingredient'}</Dialog.Title>
             <Dialog.Content>
               <TextInput
