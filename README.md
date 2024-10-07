@@ -13,7 +13,7 @@ This app allows users to take a photo of the ingredients they have in their frid
 - **React Native Paper**: For UI components like buttons, lists, dialogs, etc.
 - **Expo**: For our framework that helps build apps for Android, iOS, and the web using React Native
 - **FoodVisor API**: For our food recognition technology
-- **Gemini API**: For generating recipes
+- **Gemini AI**: For generating recipes
 
 ## Installation
 
