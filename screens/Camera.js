@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Button, Text, StyleSheet, TouchableWithoutFeedback, Dimensions } from 'react-native';
-import { Camera } from 'expo-camera/legacy';
+import React, { useEffect, useRef, useState } from "react";
+import { View, Button, Text, StyleSheet, TouchableWithoutFeedback, Dimensions } from "react-native";
+import { Camera } from "expo-camera/legacy";
+import useFoodvisor from "../hooks/useFoodadvisor";
 import { IconButton } from 'react-native-paper';
 
 export default function CameraComponent({ navigation }) {
@@ -11,17 +12,19 @@ export default function CameraComponent({ navigation }) {
 
   const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;
+  const { ingredients, analyzeImageWithFoodvisor, loading, error } = useFoodvisor();
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setHasPermission(status === "granted");
     })();
   }, []);
 
   const takePicture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
+      await analyzeImageWithFoodvisor(photo.uri);
       console.log(photo); // Handle the photo (e.g., save it, navigate, etc.)
     }
   };
@@ -39,6 +42,13 @@ export default function CameraComponent({ navigation }) {
     // Optionally, you can log or track the focus point
     console.log(`Focus Point: X: ${x}, Y: ${y}`);
   };
+
+  // Use useEffect to log ingredients after they are updated
+  useEffect(() => {
+    if (ingredients.length > 0) {
+      console.log('Ingredients:', ingredients);
+    }
+  }, [ingredients]);
 
   if (hasPermission === null) {
     return <View />;
@@ -78,24 +88,11 @@ const styles = StyleSheet.create({
   },
   camera: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   buttonContainer: {
     flex: 0.1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  circleButton: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 40, 
-    elevation: 5, 
-    shadowColor: '#000', 
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.5,
-    marginBottom: 100
   },
 });
