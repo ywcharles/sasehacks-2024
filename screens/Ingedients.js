@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TextInput, StyleSheet } from 'react-native';
-import { Button, List } from 'react-native-paper';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { Button, List, Dialog, Portal, TextInput, Provider } from 'react-native-paper';
 
 export default function Ingredients({ navigation }) {
   // Hard-coded ingredients list
   const initialIngredients = ['Tomatoes', 'Onions', 'Garlic', 'Chicken', 'Rice'];
   const [ingredients, setIngredients] = useState(initialIngredients);
   const [newIngredient, setNewIngredient] = useState('');
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(null);
 
-  const addIngredient = () => {
-    if (newIngredient) {
+  const showDialog = () => setDialogVisible(true);
+  const hideDialog = () => setDialogVisible(false);
+
+  // Add or modify ingredient based on editing state
+  const handleSave = () => {
+    if (isEditing) {
+      const updatedIngredients = ingredients.map((ingredient, i) =>
+        i === currentIndex ? newIngredient : ingredient
+      );
+      setIngredients(updatedIngredients);
+    } else {
       setIngredients([...ingredients, newIngredient]);
-      setNewIngredient('');
     }
+    setNewIngredient('');
+    hideDialog();
   };
 
   const deleteIngredient = (index) => {
@@ -20,11 +33,25 @@ export default function Ingredients({ navigation }) {
     setIngredients(updatedIngredients);
   };
 
+  const modifyIngredient = (index) => {
+    setCurrentIndex(index);
+    setNewIngredient(ingredients[index]);
+    setIsEditing(true);
+    showDialog();
+  };
+
+  const addIngredient = () => {
+    setIsEditing(false);
+    setNewIngredient('');
+    showDialog();
+  };
+
   const renderItem = ({ item, index }) => (
     <List.Item
       title={item}
       right={() => (
         <View style={styles.listButtons}>
+          <Button onPress={() => modifyIngredient(index)}>Modify</Button>
           <Button onPress={() => deleteIngredient(index)}>Delete</Button>
         </View>
       )}
@@ -32,26 +59,41 @@ export default function Ingredients({ navigation }) {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Ingredients</Text>
+    <Provider>
+      <View style={styles.container}>
+        <Text style={styles.title}>Ingredients</Text>
 
-      <TextInput
-        label="Add Ingredient"
-        value={newIngredient}
-        onChangeText={setNewIngredient}
-        style={styles.input}
-      />
-      <Button mode="contained" onPress={addIngredient} style={styles.addButton}>
-        Add Ingredient
-      </Button>
+        <FlatList
+          data={ingredients}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          style={styles.list}
+        />
+        
+        <Button mode="contained" onPress={addIngredient} style={styles.addButton}>
+          Add Ingredient
+        </Button>
 
-      <FlatList
-        data={ingredients}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        style={styles.list}
-      />
-    </View>
+        {/* Dialog for adding or modifying ingredients */}
+        <Portal>
+          <Dialog visible={dialogVisible} onDismiss={hideDialog}>
+            <Dialog.Title>{isEditing ? 'Modify Ingredient' : 'Add Ingredient'}</Dialog.Title>
+            <Dialog.Content>
+              <TextInput
+                label="Ingredient Name"
+                value={newIngredient}
+                onChangeText={setNewIngredient}
+                mode="outlined"
+              />
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={hideDialog}>Cancel</Button>
+              <Button onPress={handleSave}>Save</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+      </View>
+    </Provider>
   );
 }
 
@@ -62,14 +104,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: "bold",
-    marginTop: "15%"
-  },
-  input: {
-    marginBottom: 16,
+    fontWeight: 'bold',
+    marginTop: '15%',
   },
   addButton: {
-    marginBottom: 16,
+    height: 60,
+    justifyContent: 'center',
+    marginTop: "5%",
+    marginBottom: "10%"
   },
   list: {
     marginTop: 16,
