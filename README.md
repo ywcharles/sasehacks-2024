@@ -18,13 +18,16 @@ This app allows users to take a photo of the ingredients they have in their frid
 ## Installation
 
 1. **Clone the repository:**
+```bash
+git clone https://github.com/ywcharles/sasehacks-2024.git
+```
 2. Navigate to the project directory
 ```bash
 cd sasehacks-2024
 ```
 3. Install dependencies
 ```bash
-npm install
+npm i
 ```
 4. Run the app: To run the app on an Android/iOS simulator or a real device, use Expo:
 ```bash
