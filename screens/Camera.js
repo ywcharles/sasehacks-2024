@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Button, Text, StyleSheet } from "react-native";
+import { View, Button, Text, StyleSheet, TouchableWithoutFeedback, Dimensions } from "react-native";
 import { Camera } from "expo-camera/legacy";
 import useFoodvisor from "../hooks/useFoodadvisor";
+import { IconButton } from 'react-native-paper';
 
 export default function CameraComponent({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [autoFocus, setAutoFocus] = useState(Camera.Constants.AutoFocus.on);
+  const [focusPoint, setFocusPoint] = useState(null); // To store focus point
   const cameraRef = useRef(null);
+
+  const screenWidth = Dimensions.get('window').width;
+  const screenHeight = Dimensions.get('window').height;
   const { ingredients, analyzeImageWithFoodvisor, loading, error } = useFoodvisor();
 
   useEffect(() => {
@@ -19,9 +24,23 @@ export default function CameraComponent({ navigation }) {
   const takePicture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
-      console.log(photo); // Log the photo object here
       await analyzeImageWithFoodvisor(photo.uri);
+      console.log(photo); // Handle the photo (e.g., save it, navigate, etc.)
     }
+  };
+
+  const handleFocus = (event) => {
+    const { locationX, locationY } = event.nativeEvent;
+    const x = locationX / screenWidth;
+    const y = locationY / screenHeight;
+
+    setFocusPoint({ x, y });
+
+    // Optional: Set autoFocus off to emulate manual focus behavior after user tap
+    setAutoFocus(Camera.Constants.AutoFocus.off);
+    
+    // Optionally, you can log or track the focus point
+    console.log(`Focus Point: X: ${x}, Y: ${y}`);
   };
 
   // Use useEffect to log ingredients after they are updated
@@ -40,16 +59,25 @@ export default function CameraComponent({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Camera
-        style={styles.camera}
-        ref={cameraRef}
-        autoFocus={autoFocus} // Enable autoFocus
-        type={Camera.Constants.Type.back} // Optional: Set the camera type (front/back)
-      >
-        <View style={styles.buttonContainer}>
-          <Button title="Take Picture" onPress={takePicture} />
-        </View>
-      </Camera>
+      <TouchableWithoutFeedback onPress={handleFocus}>
+        <Camera
+          style={styles.camera}
+          ref={cameraRef}
+          autoFocus={autoFocus}
+          type={Camera.Constants.Type.back}
+          focusDepth={focusPoint?.x || 0.5} // Optional: Set focus depth based on focus point
+        >
+          <View style={styles.buttonContainer}>
+            <IconButton
+              icon="camera"
+              size={60} 
+              color="#FFFFFF" 
+              style={styles.circleButton}
+              onPress={takePicture}
+            />
+          </View>
+        </Camera>
+      </TouchableWithoutFeedback>
     </View>
   );
 }
@@ -64,7 +92,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 0.1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
