@@ -71,16 +71,7 @@ export default function HomeScreen({ navigation }) {
         >
           Get Started
         </Button>
-        <Button
-          onPress={() => navigation.navigate("Ingredients")}
-        > ingredient</Button>
-        <Button
-          onPress={() =>
-            navigation.navigate("Recipes", {
-              ingredients: ["banana", "oats", "egg", "honey"],
-            })
-          }
-        > recipes</Button>
+
       </View>
     </View>
   );

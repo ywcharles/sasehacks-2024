@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { Button, List, Dialog, Portal, TextInput, Provider } from 'react-native-paper';
 
-export default function Ingredients({ navigation }) {
+export default function Ingredients({ navigation, route }) {
   // Hard-coded ingredients list
-  const initialIngredients = ['Tomatoes', 'Onions', 'Garlic', 'Chicken', 'Rice'];
+  const {initialIngredients} = route.params;
   const [ingredients, setIngredients] = useState(initialIngredients);
   const [newIngredient, setNewIngredient] = useState('');
   const [dialogVisible, setDialogVisible] = useState(false);

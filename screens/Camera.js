@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Button, Text, StyleSheet, TouchableWithoutFeedback, Dimensions } from "react-native";
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Dimensions, ActivityIndicator } from "react-native";
 import { Camera } from "expo-camera/legacy";
 import useFoodvisor from "../hooks/useFoodadvisor";
 import { IconButton } from 'react-native-paper';
@@ -8,11 +8,12 @@ export default function CameraComponent({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [autoFocus, setAutoFocus] = useState(Camera.Constants.AutoFocus.on);
   const [focusPoint, setFocusPoint] = useState(null); // To store focus point
+  const [loading, setLoading] = useState(false); // New loading state
   const cameraRef = useRef(null);
 
   const screenWidth = Dimensions.get('window').width;
   const screenHeight = Dimensions.get('window').height;
-  const { ingredients, analyzeImageWithFoodvisor, loading, error } = useFoodvisor();
+  const { ingredients, analyzeImageWithFoodvisor, error } = useFoodvisor();
 
   useEffect(() => {
     (async () => {
@@ -23,9 +24,11 @@ export default function CameraComponent({ navigation }) {
 
   const takePicture = async () => {
     if (cameraRef.current) {
+      setLoading(true); // Start loading
       const photo = await cameraRef.current.takePictureAsync();
       await analyzeImageWithFoodvisor(photo.uri);
       console.log(photo); // Handle the photo (e.g., save it, navigate, etc.)
+      setLoading(false); // End loading
     }
   };
 
@@ -43,6 +46,15 @@ export default function CameraComponent({ navigation }) {
     console.log(`Focus Point: X: ${x}, Y: ${y}`);
   };
 
+  // Navigate to Ingredients screen when ingredients update
+  useEffect(() => {
+    if (ingredients.length > 0) {
+      navigation.navigate("Ingredients", {
+        initialIngredients: ingredients,
+      });
+    }
+  }, [ingredients, navigation]);
+
   // Use useEffect to log ingredients after they are updated
   useEffect(() => {
     if (ingredients.length > 0) {
@@ -59,6 +71,12 @@ export default function CameraComponent({ navigation }) {
 
   return (
     <View style={styles.container}>
+      {loading && ( // Loading indicator
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#007bff" />
+          <Text style={styles.loadingText}>Scanning for ingredients...</Text>
+        </View>
+      )}
       <TouchableWithoutFeedback onPress={handleFocus}>
         <Camera
           style={styles.camera}
@@ -85,6 +103,22 @@ export default function CameraComponent({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
+    zIndex: 10, // Ensure overlay is on top
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: '#007bff',
   },
   camera: {
     flex: 1,
