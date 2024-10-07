@@ -95,4 +95,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  circleButton: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 40, 
+    elevation: 5, 
+    shadowColor: '#000', 
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.5,
+    marginBottom: 100
+  },
 });
