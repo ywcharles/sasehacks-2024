@@ -69,7 +69,7 @@ Format the output as a JSON object with the following structure:
       const data = await response.json();
 
       if (response.ok && data.candidates && data.candidates.length > 0) {
-        const generatedJSON = data.candidates[0].content.parts[0].text.replace(/^```json|```$/g, '');
+        const generatedJSON = data.candidates[0].content.parts[0].text.replace(/^\s*```json\s*|\s*```$/g, '');
         console.log(generatedJSON)
         const parsedRecipes = JSON.parse(generatedJSON); // Parse the response as JSON
 
