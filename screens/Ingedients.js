@@ -46,6 +46,12 @@ export default function Ingredients({ navigation }) {
     showDialog();
   };
 
+  const handleNext = () => {
+    // Pass ingredients to the next screen or find recipes
+    console.log("Ingredients for recipe search: ", ingredients);
+    navigation.navigate('Recipes', { ingredients }); // Navigate to Recipes screen (adjust the route as necessary)
+  };
+
   const renderItem = ({ item, index }) => (
     <List.Item
       title={item}
@@ -63,6 +69,10 @@ export default function Ingredients({ navigation }) {
       <View style={styles.container}>
         <Text style={styles.title}>Ingredients</Text>
 
+        <Button buttonColor="#A9DEF9" textColor="#05299E" mode="contained" onPress={addIngredient} style={styles.addButton}>
+            Add Ingredient
+        </Button>
+
         <FlatList
           data={ingredients}
           renderItem={renderItem}
@@ -70,8 +80,8 @@ export default function Ingredients({ navigation }) {
           style={styles.list}
         />
         
-        <Button buttonColor="#A9DEF9" textColor="#05299E" mode="contained" onPress={addIngredient} style={styles.addButton}>
-          Add Ingredient
+        <Button buttonColor="#A9DEF9" textColor="#05299E" mode="contained" onPress={handleNext} style={styles.nextButton}>
+            Next
         </Button>
 
         {/* Dialog for adding or modifying ingredients */}
@@ -107,11 +117,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: '15%',
   },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: '10%',
+  },
   addButton: {
-    height: 60,
-    justifyContent: 'center',
-    marginTop: "5%",
-    marginBottom: "10%"
+    marginBottom: 10,
+    height: 50,
+    justifyContent: "center",
+    marginTop: 16
+  },
+  nextButton: {
+    marginBottom: 16,
+    marginTop: 16,
+    height: 50,
+    justifyContent: "center"
   },
   list: {
     marginTop: 16,
