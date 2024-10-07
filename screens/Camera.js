@@ -7,8 +7,7 @@ export default function CameraComponent({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [autoFocus, setAutoFocus] = useState(Camera.Constants.AutoFocus.on);
   const cameraRef = useRef(null);
-  const { ingredients, analyzeImageWithFoodvisor, loading, error } =
-    useFoodvisor();
+  const { ingredients, analyzeImageWithFoodvisor, loading, error } = useFoodvisor();
 
   useEffect(() => {
     (async () => {
@@ -20,11 +19,17 @@ export default function CameraComponent({ navigation }) {
   const takePicture = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
-      console.log(photo); // You can handle the photo here, like saving or navigating
+      console.log(photo); // Log the photo object here
       await analyzeImageWithFoodvisor(photo.uri);
-      console.log(ingredients)
     }
   };
+
+  // Use useEffect to log ingredients after they are updated
+  useEffect(() => {
+    if (ingredients.length > 0) {
+      console.log('Ingredients:', ingredients);
+    }
+  }, [ingredients]);
 
   if (hasPermission === null) {
     return <View />;

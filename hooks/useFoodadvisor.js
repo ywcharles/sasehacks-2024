@@ -1,15 +1,14 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
-
 import { FOODADVISOR_KEY } from '@env';
 
-const useFoodvisor = (uri) => {
+const useFoodvisor = () => { // Removed the uri parameter
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const analyzeImageWithFoodvisor = useCallback(async (imageUri) => {
-    const apiUrl = "https://vision.foodvisor.io/api/1.0/en/analysis/"
+    const apiUrl = "https://vision.foodvisor.io/api/1.0/en/analysis/";
     const apiKey = FOODADVISOR_KEY;
 
     const formData = new FormData();
@@ -30,10 +29,10 @@ const useFoodvisor = (uri) => {
         },
       });
 
-      const foods = []
-      const responseItems = response.data.items
-      for (let i = 0; i < responseItems.length; i++){
-        foods.push(responseItems[i].food[0].food_info.display_name)
+      const foods = [];
+      const responseItems = response.data.items;
+      for (let i = 0; i < responseItems.length; i++) {
+        foods.push(responseItems[i].food[0].food_info.display_name);
       }
 
       setIngredients(foods);
@@ -43,7 +42,7 @@ const useFoodvisor = (uri) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [setIngredients]); // Add setIngredients to the dependency array
 
   return { ingredients, analyzeImageWithFoodvisor, loading, error };
 };
