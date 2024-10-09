@@ -1,4 +1,5 @@
 # Pic-A-Recipe
+[More about Pic-A-Recipe (PPT)](https://docs.google.com/presentation/d/1Dd4HlDXPcZTSeCWssUCIpEZcHDfKX1X96yS3lYXCuaA/edit?usp=sharing)
 
 This app allows users to take a photo of the ingredients they have in their fridge, recognize the ingredients from the image, and get recipe suggestions based on those ingredients. Users can view a list of recognized ingredients, modify the list by adding or deleting items, and then proceed to find recipes that match the ingredients.
 
